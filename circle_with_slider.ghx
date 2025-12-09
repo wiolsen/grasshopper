@@ -36,37 +36,38 @@
               </items>
               <chunks count="1">
                 <chunk name="Container">
-                  <items count="3">
+                  <items count="6">
+                    <item name="Description" type_name="gh_string" type_code="10">Numeric slider for single values</item>
                     <item name="InstanceGuid" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111111</item>
                     <item name="Name" type_name="gh_string" type_code="10">Number Slider</item>
                     <item name="NickName" type_name="gh_string" type_code="10">Radius</item>
+                    <item name="Optional" type_name="gh_bool" type_code="1">false</item>
+                    <item name="SourceCount" type_name="gh_int32" type_code="3">0</item>
                   </items>
-                  <chunks count="3">
+                  <chunks count="2">
                     <chunk name="Attributes">
                       <items count="2">
+                        <item name="Bounds" type_name="gh_drawing_rectanglef" type_code="35">
+                          <X>50</X>
+                          <Y>100</Y>
+                          <W>150</W>
+                          <H>20</H>
+                        </item>
                         <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
-                          <X>100</X>
+                          <X>50</X>
                           <Y>100</Y>
                         </item>
-                        <item name="Selected" type_name="gh_bool" type_code="1">false</item>
                       </items>
                     </chunk>
                     <chunk name="Slider">
                       <items count="7">
-                        <item name="Value" type_name="gh_decimal" type_code="6">5.0</item>
-                        <item name="Min" type_name="gh_decimal" type_code="6">0.0</item>
-                        <item name="Max" type_name="gh_decimal" type_code="6">10.0</item>
                         <item name="Digits" type_name="gh_int32" type_code="3">3</item>
-                        <item name="Interval" type_name="gh_decimal" type_code="6">1.0</item>
-                        <item name="GripDisplay" type_name="gh_string" type_code="10">ShapeAndText</item>
-                        <item name="Type" type_name="gh_int32" type_code="3">0</item>
-                      </items>
-                    </chunk>
-                    <chunk name="param_output" index="0">
-                      <items count="3">
-                        <item name="InstanceGuid" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111112</item>
-                        <item name="Name" type_name="gh_string" type_code="10">Output</item>
-                        <item name="NickName" type_name="gh_string" type_code="10">R</item>
+                        <item name="GripDisplay" type_name="gh_int32" type_code="3">1</item>
+                        <item name="Interval" type_name="gh_int32" type_code="3">0</item>
+                        <item name="Max" type_name="gh_double" type_code="6">10</item>
+                        <item name="Min" type_name="gh_double" type_code="6">0</item>
+                        <item name="SnapCount" type_name="gh_int32" type_code="3">0</item>
+                        <item name="Value" type_name="gh_double" type_code="6">5.0</item>
                       </items>
                     </chunk>
                   </chunks>
@@ -82,7 +83,8 @@
               </items>
               <chunks count="1">
                 <chunk name="Container">
-                  <items count="3">
+                  <items count="4">
+                    <item name="Description" type_name="gh_string" type_code="10">Create a circle defined by base plane and radius.</item>
                     <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222222</item>
                     <item name="Name" type_name="gh_string" type_code="10">Circle</item>
                     <item name="NickName" type_name="gh_string" type_code="10">Cir</item>
@@ -90,37 +92,49 @@
                   <chunks count="4">
                     <chunk name="Attributes">
                       <items count="2">
-                        <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                        <item name="Bounds" type_name="gh_drawing_rectanglef" type_code="35">
                           <X>300</X>
                           <Y>100</Y>
+                          <W>100</W>
+                          <H>50</H>
                         </item>
-                        <item name="Selected" type_name="gh_bool" type_code="1">false</item>
+                        <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                          <X>350</X>
+                          <Y>125</Y>
+                        </item>
                       </items>
                     </chunk>
                     <!-- Input 0: Plane -->
                     <chunk name="param_input" index="0">
-                      <items count="3">
+                      <items count="6">
+                        <item name="Description" type_name="gh_string" type_code="10">Base plane of circle</item>
                         <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222223</item>
                         <item name="Name" type_name="gh_string" type_code="10">Plane</item>
                         <item name="NickName" type_name="gh_string" type_code="10">P</item>
+                        <item name="Optional" type_name="gh_bool" type_code="1">true</item>
+                        <item name="SourceCount" type_name="gh_int32" type_code="3">0</item>
                       </items>
                     </chunk>
                     <!-- Input 1: Radius -->
                     <chunk name="param_input" index="1">
-                      <items count="5">
+                      <items count="6">
+                        <item name="Description" type_name="gh_string" type_code="10">Radius of circle</item>
                         <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222224</item>
                         <item name="Name" type_name="gh_string" type_code="10">Radius</item>
                         <item name="NickName" type_name="gh_string" type_code="10">R</item>
+                        <item name="Optional" type_name="gh_bool" type_code="1">false</item>
                         <item name="SourceCount" type_name="gh_int32" type_code="3">1</item>
-                        <item name="Source" index="0" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111112</item>
+                        <item name="Source" index="0" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111111</item>
                       </items>
                     </chunk>
                     <!-- Output 0: Circle -->
                     <chunk name="param_output" index="0">
-                      <items count="3">
+                      <items count="5">
+                        <item name="Description" type_name="gh_string" type_code="10">Resulting circle</item>
                         <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222225</item>
                         <item name="Name" type_name="gh_string" type_code="10">Circle</item>
                         <item name="NickName" type_name="gh_string" type_code="10">C</item>
+                        <item name="Optional" type_name="gh_bool" type_code="1">false</item>
                       </items>
                     </chunk>
                   </chunks>
