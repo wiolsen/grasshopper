@@ -63,13 +63,30 @@ def create_doric_column():
         chord_top = 2 * top_radius * math.sin(math.pi / flute_count)
         flute_radius_top = chord_top * 0.5
         
+        # Extend the cutter axis to avoid coincident faces at top and bottom
+        p1 = rs.coerce3dpoint([x1, y1, z1])
+        p2 = rs.coerce3dpoint([x2, y2, z2])
+        vector = p2 - p1
+        length = vector.Length
+        unit_vector = vector / length
+        
+        extension = length * 0.1 # Extend by 10%
+        
+        p1_ext = p1 - unit_vector * extension
+        p2_ext = p2 + unit_vector * extension
+        
+        # Adjust radii for the extended pipe
+        radius_slope = (flute_radius_top - flute_radius_bottom) / length
+        r1_ext = flute_radius_bottom - radius_slope * extension
+        r2_ext = flute_radius_top + radius_slope * extension
+        
         # Create the axis line for the pipe
-        line = rs.AddLine([x1, y1, z1], [x2, y2, z2])
+        line = rs.AddLine(p1_ext, p2_ext)
         
         # Create the tapered pipe cutter
         # params=[0,1] (start, end), radii=[r_bot, r_top], cap=1 (flat)
         domain = rs.CurveDomain(line)
-        cutter = rs.AddPipe(line, [domain[0], domain[1]], [flute_radius_bottom, flute_radius_top], 1, 1)
+        cutter = rs.AddPipe(line, [domain[0], domain[1]], [r1_ext, r2_ext], 1, 1)
         
         rs.DeleteObject(line)
         if cutter:
