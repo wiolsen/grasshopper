@@ -78,7 +78,7 @@
             <!-- Circle -->
             <chunk name="Object" index="1">
               <items count="2">
-                <item name="GUID" type_name="gh_guid" type_code="9">3d827049-3c16-4194-9813-1835811277b9</item>
+                <item name="GUID" type_name="gh_guid" type_code="9">807b86e3-be8d-4970-92b5-f8cdcb45b06b</item>
                 <item name="Name" type_name="gh_string" type_code="10">Circle</item>
               </items>
               <chunks count="1">
@@ -114,18 +114,50 @@
                         <item name="Optional" type_name="gh_bool" type_code="1">true</item>
                         <item name="SourceCount" type_name="gh_int32" type_code="3">0</item>
                       </items>
+                      <chunks count="1">
+                        <chunk name="Attributes">
+                          <items count="2">
+                            <item name="Bounds" type_name="gh_drawing_rectanglef" type_code="35">
+                              <X>300</X>
+                              <Y>100</Y>
+                              <W>20</W>
+                              <H>20</H>
+                            </item>
+                            <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                              <X>310</X>
+                              <Y>110</Y>
+                            </item>
+                          </items>
+                        </chunk>
+                      </chunks>
                     </chunk>
                     <!-- Input 1: Radius -->
                     <chunk name="param_input" index="1">
-                      <items count="6">
+                      <items count="7">
                         <item name="Description" type_name="gh_string" type_code="10">Radius of circle</item>
                         <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222224</item>
                         <item name="Name" type_name="gh_string" type_code="10">Radius</item>
                         <item name="NickName" type_name="gh_string" type_code="10">R</item>
                         <item name="Optional" type_name="gh_bool" type_code="1">false</item>
-                        <item name="SourceCount" type_name="gh_int32" type_code="3">1</item>
                         <item name="Source" index="0" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111111</item>
+                        <item name="SourceCount" type_name="gh_int32" type_code="3">1</item>
                       </items>
+                      <chunks count="1">
+                        <chunk name="Attributes">
+                          <items count="2">
+                            <item name="Bounds" type_name="gh_drawing_rectanglef" type_code="35">
+                              <X>300</X>
+                              <Y>120</Y>
+                              <W>20</W>
+                              <H>20</H>
+                            </item>
+                            <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                              <X>310</X>
+                              <Y>130</Y>
+                            </item>
+                          </items>
+                        </chunk>
+                      </chunks>
                     </chunk>
                     <!-- Output 0: Circle -->
                     <chunk name="param_output" index="0">
@@ -136,6 +168,22 @@
                         <item name="NickName" type_name="gh_string" type_code="10">C</item>
                         <item name="Optional" type_name="gh_bool" type_code="1">false</item>
                       </items>
+                      <chunks count="1">
+                        <chunk name="Attributes">
+                          <items count="2">
+                            <item name="Bounds" type_name="gh_drawing_rectanglef" type_code="35">
+                              <X>380</X>
+                              <Y>100</Y>
+                              <W>20</W>
+                              <H>20</H>
+                            </item>
+                            <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                              <X>390</X>
+                              <Y>110</Y>
+                            </item>
+                          </items>
+                        </chunk>
+                      </chunks>
                     </chunk>
                   </chunks>
                 </chunk>
