@@ -1,6 +1,30 @@
 import rhinoscriptsyntax as rs
 import math
 
+def add_truncated_cone(plane, height, radius1, radius2, cap=True):
+    origin = plane[0]
+    xaxis = plane[1]
+    yaxis = plane[2]
+    zaxis = plane[3]
+    
+    base_circle = rs.AddCircle(plane, radius1)
+    
+    top_origin = rs.PointAdd(origin, rs.VectorScale(zaxis, height))
+    top_plane = rs.PlaneFromFrame(top_origin, xaxis, yaxis)
+    top_circle = rs.AddCircle(top_plane, radius2)
+    
+    loft = rs.AddLoftSrf([base_circle, top_circle], closed=False, loft_type=0, simplify_method=0, value=0)
+    
+    rs.DeleteObject(base_circle)
+    rs.DeleteObject(top_circle)
+    
+    if not loft: return None
+    
+    obj = loft[0]
+    if cap:
+        rs.CapPlanarHoles(obj)
+    return obj
+
 def create_doric_column():
     # 1. Get User Parameters
     height = rs.GetReal("Column Height", 10.0)
@@ -22,7 +46,7 @@ def create_doric_column():
     # Base plane is WorldXY
     plane = rs.WorldXYPlane()
     # AddTruncatedCone(plane, height, radius1, radius2, cap=True)
-    shaft = rs.AddTruncatedCone(plane, height, base_radius, top_radius, True)
+    shaft = add_truncated_cone(plane, height, base_radius, top_radius, True)
     
     # 3. Create Flutes (Boolean Subtraction)
     cutters = []
@@ -93,8 +117,11 @@ def create_doric_column():
     echinus_base_r = top_radius
     echinus_top_r = top_radius * 1.5
     
-    echinus_plane = rs.MovePlane(rs.WorldXYPlane(), [0, 0, height])
-    echinus = rs.AddTruncatedCone(echinus_plane, echinus_height, echinus_base_r, echinus_top_r, True)
+    base_plane = rs.WorldXYPlane()
+    echinus_origin = rs.PointAdd(base_plane[0], rs.VectorScale(base_plane[3], height))
+    echinus_plane = rs.PlaneFromFrame(echinus_origin, base_plane[1], base_plane[2])
+    
+    echinus = add_truncated_cone(echinus_plane, echinus_height, echinus_base_r, echinus_top_r, True)
     
     # Abacus parameters
     abacus_width = echinus_top_r * 1.4 # Square width
