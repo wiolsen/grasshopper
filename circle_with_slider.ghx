@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Archive name="Root">
+  <!-- Grasshopper Archive -->
+  <item name="Version" type_name="gh_int32" type_code="3">10000</item>
+  <chunk name="Definition">
+    <item name="PluginVersion" type_name="gh_version" type_code="80">1.0.0007</item>
+    <chunk name="DefinitionObjects">
+      <items count="2">
+        
+        <!-- Number Slider -->
+        <chunk name="Object" index="0">
+          <items count="4">
+            <item name="GUID" type_name="gh_guid" type_code="9">5e62911f-f8d1-432b-9163-0d6619003f0f</item>
+            <item name="Name" type_name="gh_string" type_code="10">Number Slider</item>
+            <item name="NickName" type_name="gh_string" type_code="10">Radius</item>
+            <item name="InstanceGuid" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111111</item>
+          </items>
+          <chunk name="Container">
+            <items count="1">
+                <!-- SliderImpl -->
+                <item name="Value" type_name="gh_decimal" type_code="6">5.0</item>
+            </items>
+          </chunk>
+          <chunk name="Attributes">
+            <items count="2">
+              <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                <X>100</X>
+                <Y>100</Y>
+              </item>
+              <item name="Selected" type_name="gh_bool" type_code="1">false</item>
+            </items>
+          </chunk>
+          <chunk name="param_output" index="0">
+             <items count="3">
+                <item name="InstanceGuid" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111112</item>
+                <item name="Name" type_name="gh_string" type_code="10">Output</item>
+                <item name="NickName" type_name="gh_string" type_code="10">R</item>
+             </items>
+          </chunk>
+        </chunk>
+
+        <!-- Circle -->
+        <chunk name="Object" index="1">
+          <items count="4">
+            <item name="GUID" type_name="gh_guid" type_code="9">3d827049-3c16-4194-9813-1835811277b9</item>
+            <item name="Name" type_name="gh_string" type_code="10">Circle</item>
+            <item name="NickName" type_name="gh_string" type_code="10">Cir</item>
+            <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222222</item>
+          </items>
+          <chunk name="Attributes">
+            <items count="2">
+              <item name="Pivot" type_name="gh_drawing_pointf" type_code="31">
+                <X>300</X>
+                <Y>100</Y>
+              </item>
+              <item name="Selected" type_name="gh_bool" type_code="1">false</item>
+            </items>
+          </chunk>
+          <!-- Input 0: Plane -->
+          <chunk name="param_input" index="0">
+             <items count="3">
+                <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222223</item>
+                <item name="Name" type_name="gh_string" type_code="10">Plane</item>
+                <item name="NickName" type_name="gh_string" type_code="10">P</item>
+             </items>
+          </chunk>
+          <!-- Input 1: Radius -->
+          <chunk name="param_input" index="1">
+             <items count="4">
+                <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222224</item>
+                <item name="Name" type_name="gh_string" type_code="10">Radius</item>
+                <item name="NickName" type_name="gh_string" type_code="10">R</item>
+                <item name="Source" type_name="gh_guid" type_code="9">11111111-1111-1111-1111-111111111112</item>
+             </items>
+          </chunk>
+          <!-- Output 0: Circle -->
+          <chunk name="param_output" index="0">
+             <items count="3">
+                <item name="InstanceGuid" type_name="gh_guid" type_code="9">22222222-2222-2222-2222-222222222225</item>
+                <item name="Name" type_name="gh_string" type_code="10">Circle</item>
+                <item name="NickName" type_name="gh_string" type_code="10">C</item>
+             </items>
+          </chunk>
+        </chunk>
+
+      </items>
+    </chunk>
+  </chunk>
+</Archive>
