@@ -72,14 +72,15 @@ def create_doric_column():
         cutter = rs.AddPipe(line, [domain[0], domain[1]], [flute_radius_bottom, flute_radius_top], 1, 1)
         
         rs.DeleteObject(line)
-        cutters.append(cutter)
+        if cutter:
+            cutters.append(cutter)
         
     # Perform Boolean Difference
     if cutters:
         # rs.BooleanDifference(input_0, input_1, delete_input=True)
         # input_0: object to subtract from
         # input_1: objects to subtract
-        diff_result = rs.BooleanDifference(shaft, cutters)
+        diff_result = rs.BooleanDifference([shaft], cutters)
         if diff_result:
             shaft = diff_result[0] # Update shaft ID to the new object
         else:
