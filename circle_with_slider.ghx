@@ -26,13 +26,14 @@
             </items>
           </chunk>
           <chunk name="Slider">
-            <items count="6">
+            <items count="7">
                 <item name="Value" type_name="gh_decimal" type_code="6">5.0</item>
                 <item name="Min" type_name="gh_decimal" type_code="6">0.0</item>
                 <item name="Max" type_name="gh_decimal" type_code="6">10.0</item>
                 <item name="Digits" type_name="gh_int32" type_code="3">3</item>
                 <item name="Interval" type_name="gh_decimal" type_code="6">1.0</item>
                 <item name="GripDisplay" type_name="gh_string" type_code="10">ShapeAndText</item>
+                <item name="Type" type_name="gh_int32" type_code="3">0</item>
             </items>
           </chunk>
           <chunk name="param_output" index="0">
