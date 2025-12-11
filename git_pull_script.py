@@ -15,17 +15,21 @@ def git_pull():
     # Change to that directory
     os.chdir(script_dir)
     
-    print(f"Running 'git pull' in {script_dir}...")
+    print("Running 'git pull' in {}...".format(script_dir))
     
     try:
         # Run git pull
-        result = subprocess.run(["git", "pull"], check=True, capture_output=True, text=True)
-        print(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("Error running git pull:")
-        print(e.stderr)
+        process = subprocess.Popen(["git", "pull"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        
+        if process.returncode == 0:
+            print(stdout)
+        else:
+            print("Error running git pull:")
+            print(stderr)
+
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print("An unexpected error occurred: {}".format(e))
 
 if __name__ == "__main__":
     git_pull()
