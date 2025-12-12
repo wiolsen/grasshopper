@@ -211,96 +211,101 @@ if __name__ == "__main__":
     else:
         print("Continuing session: " + os.path.basename(session_folder))
 
-    user_request = ""
-    
-    # Try to get input from Rhino if available
-    try:
-        import Rhino
-        gs = Rhino.Input.Custom.GetString()
-        gs.SetCommandPrompt("What do you want Rhino to do?")
-        gs.AcceptNothing(True)
-        gs.GetLiteralString()
-        if gs.CommandResult() == Rhino.Commands.Result.Success:
-            rhino_input = gs.StringResult()
-            if rhino_input:
-                user_request = rhino_input
-    except ImportError:
-        user_request = get_input_compat("What do you want Rhino to do? ")
-
-    if not user_request:
-        print("No request provided. Exiting.")
-        sys.exit(0)
-
-    # Build history
-    messages = build_chat_history(session_folder, SYSTEM_PROMPT)
-    messages.append({"role": "user", "content": user_request})
-
-    print("Generating script for: " + user_request)
-    generated_code = generate_script_content(messages)
-    
-    # Clean up code (remove markdown blocks if the AI ignored instructions)
-    if generated_code.startswith("```python"):
-        generated_code = generated_code[9:]
-    if generated_code.startswith("```"):
-        generated_code = generated_code[3:]
-    if generated_code.endswith("```"):
-        generated_code = generated_code[:-3]
-    
-    generated_code = generated_code.strip()
-
-    # Determine index for filenames
-    index = get_next_index(session_folder)
-    
-    # Save prompt
-    prompt_filename = "prompt_{}.txt".format(index)
-    with open(os.path.join(session_folder, prompt_filename), "w") as f:
-        f.write(user_request)
-
-    # Save script
-    script_filename = "script_{}.py".format(index)
-    full_path = os.path.join(session_folder, script_filename)
-    
-    with open(full_path, "w") as f:
-        f.write(generated_code)
+    while True:
+        user_request = ""
         
-    print("\n--- Generated Script (" + script_filename + ") ---")
-    print(generated_code)
-    print("------------------------------------------\n")
-    
-    # Ask to run
-    run_it = ""
-    try:
-        import Rhino
-        gs = Rhino.Input.Custom.GetString()
-        gs.SetCommandPrompt("Do you want to run this script? (Y/N)")
-        gs.AcceptNothing(True)
-        gs.GetLiteralString()
-        if gs.CommandResult() == Rhino.Commands.Result.Success:
-            run_it = gs.StringResult()
-    except ImportError:
-        run_it = get_input_compat("Do you want to run this script? (Y/N): ")
-        
-    if run_it and run_it.upper() == "Y":
-        print("Running script...")
-        # Execute the script
+        # Try to get input from Rhino if available
         try:
-            # Add the directory to sys.path so imports work if needed
-            if session_folder not in sys.path:
-                sys.path.append(session_folder)
-                
-            if sys.version_info[0] < 3:
-                execfile(full_path)
-            else:
-                with open(full_path) as f:
-                    code = compile(f.read(), full_path, 'exec')
-                    exec(code)
-            print("Script execution finished.")
-        except Exception as e:
-            error_msg = str(e)
-            print("Error running script: " + error_msg)
-            # Save error
-            error_filename = "error_{}.txt".format(index)
-            with open(os.path.join(session_folder, error_filename), "w") as f:
-                f.write(error_msg)
-    else:
-        print("Script saved but not run.")
+            import Rhino
+            gs = Rhino.Input.Custom.GetString()
+            gs.SetCommandPrompt("What do you want Rhino to do? (or type 'quit' to exit)")
+            gs.AcceptNothing(True)
+            gs.GetLiteralString()
+            if gs.CommandResult() == Rhino.Commands.Result.Success:
+                rhino_input = gs.StringResult()
+                if rhino_input:
+                    user_request = rhino_input
+        except ImportError:
+            user_request = get_input_compat("What do you want Rhino to do? (or type 'quit' to exit) ")
+
+        if not user_request:
+            print("No request provided.")
+            continue
+
+        if user_request.strip().lower() in ["quit", "exit", "stop"]:
+            print("Exiting session.")
+            break
+
+        # Build history
+        messages = build_chat_history(session_folder, SYSTEM_PROMPT)
+        messages.append({"role": "user", "content": user_request})
+
+        print("Generating script for: " + user_request)
+        generated_code = generate_script_content(messages)
+        
+        # Clean up code (remove markdown blocks if the AI ignored instructions)
+        if generated_code.startswith("```python"):
+            generated_code = generated_code[9:]
+        if generated_code.startswith("```"):
+            generated_code = generated_code[3:]
+        if generated_code.endswith("```"):
+            generated_code = generated_code[:-3]
+        
+        generated_code = generated_code.strip()
+
+        # Determine index for filenames
+        index = get_next_index(session_folder)
+        
+        # Save prompt
+        prompt_filename = "prompt_{}.txt".format(index)
+        with open(os.path.join(session_folder, prompt_filename), "w") as f:
+            f.write(user_request)
+
+        # Save script
+        script_filename = "script_{}.py".format(index)
+        full_path = os.path.join(session_folder, script_filename)
+        
+        with open(full_path, "w") as f:
+            f.write(generated_code)
+            
+        print("\n--- Generated Script (" + script_filename + ") ---")
+        print(generated_code)
+        print("------------------------------------------\n")
+        
+        # Ask to run
+        run_it = ""
+        try:
+            import Rhino
+            gs = Rhino.Input.Custom.GetString()
+            gs.SetCommandPrompt("Do you want to run this script? (Y/N)")
+            gs.AcceptNothing(True)
+            gs.GetLiteralString()
+            if gs.CommandResult() == Rhino.Commands.Result.Success:
+                run_it = gs.StringResult()
+        except ImportError:
+            run_it = get_input_compat("Do you want to run this script? (Y/N): ")
+            
+        if run_it and run_it.upper() == "Y":
+            print("Running script...")
+            # Execute the script
+            try:
+                # Add the directory to sys.path so imports work if needed
+                if session_folder not in sys.path:
+                    sys.path.append(session_folder)
+                    
+                if sys.version_info[0] < 3:
+                    execfile(full_path)
+                else:
+                    with open(full_path) as f:
+                        code = compile(f.read(), full_path, 'exec')
+                        exec(code)
+                print("Script execution finished.")
+            except Exception as e:
+                error_msg = str(e)
+                print("Error running script: " + error_msg)
+                # Save error
+                error_filename = "error_{}.txt".format(index)
+                with open(os.path.join(session_folder, error_filename), "w") as f:
+                    f.write(error_msg)
+        else:
+            print("Script saved but not run.")
