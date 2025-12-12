@@ -156,6 +156,17 @@ def get_chat_response(user_message):
 # Example usage
 if __name__ == "__main__":
     user_input = "what is the main function of mitochondria in cells?"
-    print("Sending request...")
+
+    # Try to get input from Rhino if available
+    try:
+        import rhinoscriptsyntax as rs
+        # Ask user for input in Rhino
+        rhino_input = rs.GetString("What would you like to ask the AI?")
+        if rhino_input:
+            user_input = rhino_input
+    except ImportError:
+        pass
+
+    print("Sending request for: " + user_input)
     answer = get_chat_response(user_input)
     print(answer)
