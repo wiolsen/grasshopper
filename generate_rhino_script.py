@@ -204,36 +204,12 @@ SYSTEM_PROMPT = (
 )
 
 if __name__ == "__main__":
-    # Determine mode
-    mode = "continue"
-    
-    # Ask user whether to continue or start new
-    try:
-        import Rhino
-        gs = Rhino.Input.Custom.GetString()
-        gs.SetCommandPrompt("Continue previous session? (Y/n)")
-        gs.AcceptNothing(True)
-        gs.GetLiteralString()
-        if gs.CommandResult() == Rhino.Commands.Result.Success:
-            res = gs.StringResult()
-            if res and res.strip().lower().startswith("n"):
-                mode = "new"
-    except ImportError:
-        res = get_input_compat("Continue previous session? (Y/n) [Y]: ")
-        if res and res.strip().lower().startswith("n"):
-            mode = "new"
-
-    session_folder = None
-    if mode == "continue":
-        session_folder = get_latest_session_folder()
-        if not session_folder:
-            print("No existing session found. Starting a new session.")
-            session_folder = create_new_session_folder()
-        else:
-            print("Continuing session: " + os.path.basename(session_folder))
-    else:
+    session_folder = get_latest_session_folder()
+    if not session_folder:
+        print("No existing session found. Starting a new session.")
         session_folder = create_new_session_folder()
-        print("Started new session: " + os.path.basename(session_folder))
+    else:
+        print("Continuing session: " + os.path.basename(session_folder))
 
     user_request = ""
     
