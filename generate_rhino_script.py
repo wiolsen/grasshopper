@@ -67,6 +67,7 @@ def generate_script_content(user_message):
         "Return ONLY the python code required to perform the user's request. "
         "Do not include markdown formatting like ```python or ```. "
         "Do not include explanations unless they are comments in the code."
+        " Make sure that the generated script has the necessary imports because it will be running on its own."
     )
 
     data = {
