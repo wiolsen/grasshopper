@@ -5,6 +5,22 @@ except ImportError:
     import urllib.error
 import json
 import os
+import sys
+
+# Check for IronPython/Rhino environment and setup .NET imports
+try:
+    import System
+    from System.Net import WebRequest, ServicePointManager, SecurityProtocolType
+    from System.IO import StreamReader
+    from System.Text import Encoding
+    # Ensure TLS 1.2 is enabled for OpenAI API
+    try:
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+    except:
+        pass
+    IS_IRONPYTHON = True
+except ImportError:
+    IS_IRONPYTHON = False
 
 # Function to manually load .env file since python-dotenv is not standard in IronPython
 def load_env(filepath):
@@ -50,11 +66,6 @@ def get_chat_response(user_message):
 
     url = "https://api.openai.com/v1/chat/completions"
     
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + API_KEY
-    }
-    
     # Construct the data payload
     data = {
         "model": "gpt-3.5-turbo",
@@ -65,29 +76,82 @@ def get_chat_response(user_message):
         "temperature": 0.7,
         "max_tokens": 150
     }
-    
-    # Encode data to JSON and convert to bytes
-    json_data = json.dumps(data).encode('utf-8')
-    
-    try:
-        # Create the request
-        req = urllib2.Request(url, json_data, headers)
+
+    if IS_IRONPYTHON:
+        try:
+            # .NET implementation for Rhino/IronPython
+            request = WebRequest.Create(url)
+            request.Method = "POST"
+            request.ContentType = "application/json"
+            request.Headers.Add("Authorization", "Bearer " + API_KEY)
+            
+            # Write body
+            json_str = json.dumps(data)
+            bytes_data = Encoding.UTF8.GetBytes(json_str)
+            request.ContentLength = bytes_data.Length
+            
+            req_stream = request.GetRequestStream()
+            req_stream.Write(bytes_data, 0, bytes_data.Length)
+            req_stream.Close()
+            
+            # Get response
+            try:
+                response = request.GetResponse()
+                stream = response.GetResponseStream()
+                reader = StreamReader(stream)
+                response_text = reader.ReadToEnd()
+                
+                # Cleanup
+                reader.Close()
+                stream.Close()
+                response.Close()
+                
+                response_json = json.loads(response_text)
+                return response_json['choices'][0]['message']['content']
+            except Exception as e:
+                # Handle WebException (HTTP errors)
+                if hasattr(e, 'Response') and e.Response:
+                    stream = e.Response.GetResponseStream()
+                    reader = StreamReader(stream)
+                    err_text = reader.ReadToEnd()
+                    reader.Close()
+                    stream.Close()
+                    e.Response.Close()
+                    return "API Error: " + err_text
+                return "Error getting response: " + str(e)
+                
+        except Exception as e:
+            return "Error (.NET): " + str(e)
+            
+    else:
+        # Standard Python implementation
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + API_KEY
+        }
         
-        # Open the URL (send request)
-        response = urllib2.urlopen(req)
+        # Encode data to JSON and convert to bytes
+        json_data = json.dumps(data).encode('utf-8')
         
-        # Read and parse the response
-        response_text = response.read().decode('utf-8')
-        response_json = json.loads(response_text)
-        
-        return response_json['choices'][0]['message']['content']
-        
-    except urllib2.HTTPError as e:
-        return "HTTP Error: " + str(e.code) + " " + str(e.read())
-    except urllib2.URLError as e:
-        return "URL Error: " + str(e.reason)
-    except Exception as e:
-        return "Error: " + str(e)
+        try:
+            # Create the request
+            req = urllib2.Request(url, json_data, headers)
+            
+            # Open the URL (send request)
+            response = urllib2.urlopen(req)
+            
+            # Read and parse the response
+            response_text = response.read().decode('utf-8')
+            response_json = json.loads(response_text)
+            
+            return response_json['choices'][0]['message']['content']
+            
+        except urllib2.HTTPError as e:
+            return "HTTP Error: " + str(e.code) + " " + str(e.read())
+        except urllib2.URLError as e:
+            return "URL Error: " + str(e.reason)
+        except Exception as e:
+            return "Error: " + str(e)
 
 # Example usage
 if __name__ == "__main__":
