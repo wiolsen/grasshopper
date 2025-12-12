@@ -71,7 +71,7 @@ def generate_script_content(user_message):
     )
 
     data = {
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4o",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message}
