@@ -159,11 +159,16 @@ if __name__ == "__main__":
 
     # Try to get input from Rhino if available
     try:
-        import rhinoscriptsyntax as rs
-        # Ask user for input in Rhino
-        rhino_input = rs.GetString("What would you like to ask the AI?")
-        if rhino_input:
-            user_input = rhino_input
+        import Rhino
+        # Ask user for input in Rhino allowing spaces
+        gs = Rhino.Input.Custom.GetString()
+        gs.SetCommandPrompt("What would you like to ask the AI?")
+        gs.AcceptNothing(True)
+        gs.GetLiteralString()
+        if gs.CommandResult() == Rhino.Commands.Result.Success:
+            rhino_input = gs.StringResult()
+            if rhino_input:
+                user_input = rhino_input
     except ImportError:
         pass
 
