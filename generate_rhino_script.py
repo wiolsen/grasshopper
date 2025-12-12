@@ -4,6 +4,7 @@ except ImportError:
     import urllib.request as urllib2
     import urllib.error
 import json
+import re
 import os
 import sys
 import datetime
@@ -243,13 +244,10 @@ if __name__ == "__main__":
         print("Generating script for: " + user_request)
         generated_code = generate_script_content(messages)
         
-        # Clean up code (remove markdown blocks if the AI ignored instructions)
-        if generated_code.startswith("```python"):
-            generated_code = generated_code[9:]
-        if generated_code.startswith("```"):
-            generated_code = generated_code[3:]
-        if generated_code.endswith("```"):
-            generated_code = generated_code[:-3]
+        # Clean up code (extract from markdown block if present)
+        code_block_match = re.search(r"```(?:python)?\s*(.*?)```", generated_code, re.DOTALL)
+        if code_block_match:
+            generated_code = code_block_match.group(1)
         
         generated_code = generated_code.strip()
 
